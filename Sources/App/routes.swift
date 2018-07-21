@@ -15,4 +15,8 @@ public func routes(_ router: Router) throws {
     router.post(Movie.self, at: "movies") { req, movie -> Future<HTTPResponseStatus> in
         return movie.save(on: req).transform(to: .created)
     }
+    
+    router.delete("movies", Movie.parameter) { req -> Future<HTTPResponseStatus> in
+        return try req.parameters.next(Movie.self).delete(on: req).transform(to: .noContent)
+    }
 }

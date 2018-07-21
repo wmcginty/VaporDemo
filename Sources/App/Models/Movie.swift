@@ -20,3 +20,5 @@ struct Movie: Content, SQLiteUUIDModel, Migration {
         self.year = year
     }
 }
+
+extension Movie: Parameter { }
