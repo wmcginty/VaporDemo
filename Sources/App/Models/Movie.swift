@@ -9,7 +9,9 @@ import Foundation
 import Vapor
 import FluentSQLite
 
-struct Movie: Content {
+struct Movie: Content, SQLiteUUIDModel, Migration {
+    var id: UUID?
+    
     let title: String
     let year: Int
     

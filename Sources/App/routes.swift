@@ -8,8 +8,7 @@ public func routes(_ router: Router) throws {
         return "Hello, world!"
     }
     
-    router.get("movies") { req -> [Movie] in
-        return [Movie(title: "Infinity War", year: 2018),
-                Movie(title: "The Incredibles 2", year: 2018)]
+    router.get("movies") { req -> Future<[Movie]> in
+        return Movie.query(on: req).all()
     }
 }
