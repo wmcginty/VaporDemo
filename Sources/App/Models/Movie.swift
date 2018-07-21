@@ -9,7 +9,7 @@ import Foundation
 import Vapor
 import FluentSQLite
 
-struct Movie: Codable {
+struct Movie: Content {
     let title: String
     let year: Int
     
