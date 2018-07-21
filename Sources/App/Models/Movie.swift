@@ -12,4 +12,9 @@ import FluentSQLite
 struct Movie: Codable {
     let title: String
     let year: Int
+    
+    init(title: String, year: Int) {
+        self.title = title
+        self.year = year
+    }
 }
