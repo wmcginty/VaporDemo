@@ -13,6 +13,7 @@ struct MovieRouteCollection: RouteCollection {
         router.get("movies", use: getAllMoviesHandler)
         router.get("movies", Movie.parameter, use: getMovieHandler)
         router.post(Movie.self, at: "movies", use: postMovieHandler)
+        router.put(Movie.self, at: "movies", Movie.parameter, use: updateMovieHandler)
         router.delete("movies", Movie.parameter, use: deleteMovieHandler)
     }
 }
@@ -28,11 +29,18 @@ private extension MovieRouteCollection {
         return try request.parameters.next(Movie.self)
     }
 
-    func postMovieHandler(request: Request, movie: Movie) -> Future<HTTPResponseStatus> {
+    func postMovieHandler(request: Request, movie: Movie) -> Future<HTTPStatus> {
         return movie.save(on: request).transform(to: .created)
     }
+    
+    func updateMovieHandler(request: Request, newMovie: Movie) throws -> Future<HTTPStatus> {
+        return try request.parameters.next(Movie.self).flatMap { curMovie in
+            let updatedMovie = Movie(id: curMovie.id, title: newMovie.title, year: newMovie.year)
+            return updatedMovie.save(on: request).transform(to: .noContent)
+        }
+    }
 
-    func deleteMovieHandler(request: Request) throws -> Future<HTTPResponseStatus> {
+    func deleteMovieHandler(request: Request) throws -> Future<HTTPStatus> {
         return try request.parameters.next(Movie.self).delete(on: request).transform(to: .noContent)
     }
 }
